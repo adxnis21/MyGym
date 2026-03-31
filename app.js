@@ -401,7 +401,7 @@ function renderActiveWorkout() {
         </div>
         <table class="sets-table">
           <thead><tr>
-            <th>SET</th><th>KG</th><th>REPS</th><th>✓</th>
+            <th>SET</th><th>KG</th><th>REPS</th><th>RPE</th><th>✓</th><th></th>
           </tr></thead>
           <tbody id="sets-body-${ei}">
             ${ex.sets.map((s, si) => renderSetRow(ei, si, s)).join('')}
@@ -413,10 +413,14 @@ function renderActiveWorkout() {
 }
 
 function renderSetRow(ei, si, set) {
+  const rpe = set.rpe || 0;
   return `<tr class="set-row ${set.done ? 'done-row' : ''}" id="sr-${ei}-${si}">
     <td><div class="set-num">${si + 1}</div></td>
     <td><input class="set-input" type="number" inputmode="decimal" placeholder="0" value="${set.kg}" onchange="updateSet(${ei},${si},'kg',this.value)"></td>
     <td><input class="set-input" type="number" inputmode="numeric" placeholder="0" value="${set.reps}" onchange="updateSet(${ei},${si},'reps',this.value)"></td>
+    <td>
+      <button class="rpe-btn ${rpe > 0 ? 'rpe-'+rpe : ''}" id="rpe-${ei}-${si}" onclick="cycleRpe(${ei},${si})"></button>
+    </td>
     <td>
       <button class="set-done-btn ${set.done ? 'done' : ''}" onclick="toggleSetDone(${ei},${si})">
         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -452,7 +456,14 @@ function addSetToExercise(ei) {
   const si = workoutState.exercises[ei].sets.length - 1;
   if (tbody) tbody.insertAdjacentHTML('beforeend', renderSetRow(ei, si, workoutState.exercises[ei].sets[si]));
 }
-
+function cycleRpe(ei, si) {
+  const set = workoutState.exercises[ei].sets[si];
+  set.rpe = ((set.rpe || 0) + 1) % 4;
+  const btn = document.getElementById(`rpe-${ei}-${si}`);
+  if (btn) {
+    btn.className = 'rpe-btn' + (set.rpe > 0 ? ' rpe-' + set.rpe : '');
+  }
+}
 function deleteSet(ei, si) {
   if (workoutState.exercises[ei].sets.length <= 1) {
     showToast('Debe haber al menos una serie');

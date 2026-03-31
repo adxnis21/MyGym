@@ -1005,6 +1005,20 @@ body { font-family: var(--font-body); color: var(--text); -webkit-font-smoothing
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+/* ── SEMÁFORO RPE ── */
+.rpe-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #444;
+  background: #2a2a2a;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background .2s, border-color .2s;
+}
+.rpe-btn.rpe-1 { background: #22c55e; border-color: #16a34a; }
+.rpe-btn.rpe-2 { background: #f59e0b; border-color: #d97706; }
+.rpe-btn.rpe-3 { background: #ef4444; border-color: #dc2626; }
 /* ── REMINDER CARD ── */
 .reminder-card {
   background: var(--bg2);
