@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="GymPro">
@@ -104,7 +104,6 @@
           <div class="empty-sub">Tus mejores marcas aparecerán aquí</div>
         </div>
       </div>
-      <div style="height:100px"></div>
     </div>
   </div>
 
@@ -123,7 +122,7 @@
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </button>
       </div>
-      <div class="scroll-area" style="overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1;padding-bottom:120px">
+      <div class="scroll-area" style="overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1">
           <button class="new-routine-big-btn" onclick="showView('view-create-routine')">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Nueva Rutina
@@ -152,7 +151,7 @@
         </div>
         <button class="save-btn-top" onclick="saveRoutine()">Guardar</button>
       </div>
-      <div class="scroll-area" style="overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1;padding-bottom:120px">
+      <div class="scroll-area" style="overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1">
         <div class="form-group">
           <label class="form-label">Nombre de la rutina</label>
           <input class="form-input" id="routineName" placeholder="Ej: Pecho y Tríceps" maxlength="40">
@@ -209,7 +208,7 @@
         <div class="rtb-progress"><div class="rtb-fill" id="restFill"></div></div>
       </div>
 
-      <div id="activeWorkoutExercises" style="padding-top:0;overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1;padding-bottom:120px"></div>
+      <div id="activeWorkoutExercises" style="padding-top:0;overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1">
     </div>
 
   </div>
@@ -314,8 +313,6 @@
           <div class="streak-label">Mejor racha</div>
         </div>
       </div>
-
-      <div style="height:110px"></div>
     </div>
   </div>
 
