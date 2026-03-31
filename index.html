@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GymPro">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>MyGym</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- SCREENS -->
+<div id="app">
+
+  <!-- ══════════ INICIO ══════════ -->
+  <div class="screen active" id="screen-inicio">
+    <div class="safe-top"></div>
+    <div class="screen-header">
+      <div>
+        <div class="screen-label">BIENVENIDO</div>
+        <h1 class="screen-title" id="inicioTitle">MyGym</h1>
+      </div>
+      <div class="header-avatar" id="headerAvatar">?</div>
+    </div>
+
+    <div class="scroll-area">
+      <!-- Esta semana -->
+      <div class="section-label">ESTA SEMANA</div>
+      <div class="week-stats-grid" id="weekStatsGrid">
+        <div class="week-stat-card">
+          <div class="wsc-value" id="wsc-entrenos">0</div>
+          <div class="wsc-label">Entrenos</div>
+        </div>
+        <div class="week-stat-card">
+          <div class="wsc-value" id="wsc-vol">0</div>
+          <div class="wsc-label">Vol. kg</div>
+        </div>
+        <div class="week-stat-card">
+        <div class="wsc-value" id="wsc-series">0</div>
+        <div class="wsc-label">Series</div>
+      </div>
+        <div class="week-stat-card accent">
+          <div class="wsc-value" id="wsc-racha">🔥0</div>
+          <div class="wsc-label">Racha sem.</div>
+        </div>
+      </div>
+      <!-- Recordatorio -->
+<div id="reminderCard" class="reminder-card" onclick="openReminderConfig()">
+  <div class="reminder-left">
+    <div class="reminder-icon">🔔</div>
+    <div>
+      <div class="reminder-title" id="reminderTitle">Configura tu recordatorio</div>
+      <div class="reminder-sub" id="reminderSub">Toca para establecer cuándo entrenar</div>
+    </div>
+  </div>
+  <div class="reminder-arrow">›</div>
+</div>
+
+<!-- Modal recordatorio -->
+<div id="reminderModal" style="display:none">
+  <div class="reminder-config-card">
+    <div class="rcc-header">
+      <div class="rcc-title">Recordatorio</div>
+      <button class="rcc-close" onclick="closeReminderConfig()">✕</button>
+    </div>
+    <div class="form-group" style="padding:0;margin-top:14px">
+      <label class="form-label">Hora</label>
+      <input class="form-input" type="time" id="reminderTime" value="00:00">
+    </div>
+    <div class="form-group" style="padding:0;margin-top:14px">
+      <label class="form-label">Mensaje personalizado</label>
+      <input class="form-input" id="reminderMsg" placeholder="Ej: ¡Hora de entrenar!" maxlength="60">
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="rc-action-btn rc-action-edit" style="flex:1" onclick="closeReminderConfig()">Cancelar</button>
+      <button class="rc-action-btn rc-action-start" style="flex:2" onclick="saveReminder()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+      <!-- Últimos entrenos -->
+      <div class="section-label" style="margin-top:24px">ÚLTIMOS ENTRENOS</div>
+      <div id="lastWorkoutsList">
+        <div class="empty-state">
+          <div class="empty-icon">💪</div>
+          <div class="empty-title">Sin entrenos aún</div>
+          <div class="empty-sub">Ve a Entrenamiento para crear tu primera rutina</div>
+        </div>
+      </div>
+
+      <!-- Records -->
+      <div class="section-label" style="margin-top:24px">RÉCORDS PERSONALES</div>
+      <div id="recordsList">
+        <div class="empty-state">
+          <div class="empty-icon">🏆</div>
+          <div class="empty-title">Sin récords aún</div>
+          <div class="empty-sub">Tus mejores marcas aparecerán aquí</div>
+        </div>
+      </div>
+      <div style="height:100px"></div>
+    </div>
+  </div>
+
+  <!-- ══════════ ENTRENAMIENTO ══════════ -->
+  <div class="screen" id="screen-entrenamiento">
+    <div class="safe-top"></div>
+
+    <!-- Vista: Lista de rutinas -->
+    <div id="view-routines" style="display:flex;flex-direction:column;height:100vh;overflow:hidden">
+      <div class="screen-header">
+        <div>
+          <div class="screen-label">MIS RUTINAS</div>
+          <h1 class="screen-title">Entrenamiento</h1>
+        </div>
+        <button class="icon-btn" onclick="showView('view-create-routine')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+      </div>
+      <div class="scroll-area" style="overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1;padding-bottom:120px">
+          <button class="new-routine-big-btn" onclick="showView('view-create-routine')">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nueva Rutina
+        </button>
+        <div class="section-label" style="margin-top:20px">MIS RUTINAS</div>
+        <div id="routinesList">
+          <div class="empty-state">
+            <div class="empty-icon">📋</div>
+            <div class="empty-title">Sin rutinas</div>
+            <div class="empty-sub">Crea tu primera rutina pulsando el botón</div>
+          </div>
+        </div>
+        <div style="height:100px"></div>
+      </div>
+    </div>
+
+    <!-- Vista: Crear rutina -->
+   <div id="view-create-routine" style="display:none;flex-direction:column;height:100vh;overflow:hidden">
+      <div class="screen-header">
+        <button class="back-btn" onclick="showView('view-routines')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div>
+          <div class="screen-label">NUEVA</div>
+          <h1 class="screen-title">Rutina</h1>
+        </div>
+        <button class="save-btn-top" onclick="saveRoutine()">Guardar</button>
+      </div>
+      <div class="scroll-area" style="overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1;padding-bottom:120px">
+        <div class="form-group">
+          <label class="form-label">Nombre de la rutina</label>
+          <input class="form-input" id="routineName" placeholder="Ej: Pecho y Tríceps" maxlength="40">
+        </div>
+        <div class="section-label">EJERCICIOS AÑADIDOS</div>
+        <div id="addedExercises" style="margin-bottom:12px"></div>
+
+        <button class="add-exercise-btn" onclick="showView('view-exercise-picker')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Añadir ejercicio
+        </button>
+        <div style="height:100px"></div>
+      </div>
+    </div>
+
+    <!-- Vista: Selector de ejercicios -->
+    <div id="view-exercise-picker" style="display:none;flex-direction:column;height:100vh;overflow:hidden">
+      <div class="screen-header">
+        <button class="back-btn" onclick="showView('view-create-routine')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div>
+          <div class="screen-label">SELECCIONAR</div>
+          <h1 class="screen-title">Ejercicio</h1>
+        </div>
+      </div>
+      <div style="padding:0 16px 12px">
+        <input class="search-input" id="exerciseSearch" placeholder="Buscar ejercicio..." oninput="filterExercises(this.value)">
+      </div>
+      <div class="muscle-filter-scroll" id="muscleFilter"></div>
+      <div id="exercisePickerList" style="padding-top:8px;overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1;padding-bottom:100px"></div>
+    </div>
+
+    <!-- Vista: Entreno activo -->
+   <div id="view-active-workout" style="display:none;flex-direction:column;height:100vh;overflow:hidden">
+      <div class="screen-header" style="background:#000000;position:sticky;top:0;z-index:50;">
+        <button class="back-btn" onclick="cancelWorkout()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div style="flex:1;text-align:center">
+          <div class="workout-timer-label" id="workoutTimerLabel">00:00</div>
+          <div style="font-size:13px;color:#888;" id="activeWorkoutName">Entreno</div>
+        </div>
+        <button class="finish-btn" onclick="finishWorkout()">Finalizar</button>
+      </div>
+
+      <!-- Rest timer -->
+      <div class="rest-timer-bar" id="restTimerBar" style="display:none">
+        <div class="rtb-inner">
+          <span class="rtb-label">Descanso</span>
+          <span class="rtb-count" id="restCount">60</span>
+          <button class="rtb-skip" onclick="skipRest()">Saltar</button>
+        </div>
+        <div class="rtb-progress"><div class="rtb-fill" id="restFill"></div></div>
+      </div>
+
+      <div id="activeWorkoutExercises" style="padding-top:0;overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1;padding-bottom:120px"></div>
+    </div>
+
+  </div>
+
+  <!-- ══════════ PERFIL ══════════ -->
+  <div class="screen" id="screen-perfil">
+    <div class="safe-top"></div>
+    <div class="screen-header">
+      <div>
+        <div class="screen-label">MI</div>
+        <h1 class="screen-title">Perfil</h1>
+      </div>
+      <button class="icon-btn" onclick="toggleEditProfile()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </button>
+    </div>
+    <div class="scroll-area">
+
+      <!-- Avatar y nombre -->
+      <div class="profile-hero">
+        <div style="position:relative;display:inline-block">
+          <div class="profile-avatar-big" id="profileAvatarBig">?</div>
+          <button class="avatar-cam-btn" onclick="document.getElementById('avatarInput').click()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </button>
+          <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="loadAvatarPhoto(this)">
+        </div>
+        <div class="profile-name-big" id="profileNameBig">Tu nombre</div>
+        <div class="profile-sub" id="profileSubBig">Configura tu perfil</div>
+      </div>
+
+      <!-- Edit form (oculto por defecto) -->
+      <div id="profileEditForm" style="display:none;padding:0 16px 16px">
+        <div class="form-group">
+          <label class="form-label">Nombre</label>
+          <input class="form-input" id="pName" placeholder="Tu nombre">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Peso (kg)</label>
+          <input class="form-input" id="pWeight" type="number" placeholder="75" min="30" max="250">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Altura (cm)</label>
+          <input class="form-input" id="pHeight" type="number" placeholder="175" min="100" max="250">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Edad</label>
+          <input class="form-input" id="pAge" type="number" placeholder="25" min="10" max="100">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Sexo</label>
+          <div class="gender-selector">
+            <button class="gender-btn" data-g="H" onclick="selectGender('H')">Hombre</button>
+            <button class="gender-btn" data-g="M" onclick="selectGender('M')">Mujer</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Objetivo</label>
+          <select class="form-input" id="pGoal">
+            <option value="cut">Definir (déficit calórico)</option>
+            <option value="maintain">Mantener peso</option>
+            <option value="bulk">Ganar masa (superávit)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Actividad física</label>
+          <select class="form-input" id="pActivity">
+            <option value="1.2">Sedentario (sin ejercicio)</option>
+            <option value="1.375">Ligero (1-3 días/semana)</option>
+            <option value="1.55" selected>Moderado (3-5 días/semana)</option>
+            <option value="1.725">Activo (6-7 días/semana)</option>
+            <option value="1.9">Muy activo (2x día)</option>
+          </select>
+        </div>
+        <button class="save-profile-btn" onclick="saveProfile()">Guardar perfil</button>
+      </div>
+
+      <!-- Calorías -->
+      <div class="calorie-card" id="calorieCard" style="display:none">
+        <div class="cal-header">
+          <div class="cal-title">Calorías diarias</div>
+          <div class="cal-goal-badge" id="calGoalBadge">Mantenimiento</div>
+        </div>
+        <div class="cal-number" id="calNumber">—</div>
+        <div class="cal-macros" id="calMacros"></div>
+        <div class="cal-desc" id="calDesc"></div>
+      </div>
+
+      <!-- Calendario -->
+      <div class="section-label" style="margin-top:20px">CALENDARIO DE ENTRENOS</div>
+      <div class="calendar-card" id="calendarCard"></div>
+
+      <!-- Racha -->
+      <div class="streak-card" id="streakCard">
+        <div class="streak-fire">🔥</div>
+        <div class="streak-info">
+          <div class="streak-num" id="streakNum">0 semanas</div>
+          <div class="streak-label">Racha actual</div>
+        </div>
+        <div class="streak-best">
+          <div class="streak-num" id="streakBest" style="font-size:18px">0</div>
+          <div class="streak-label">Mejor racha</div>
+        </div>
+      </div>
+
+      <div style="height:110px"></div>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="nav-btn active" data-screen="inicio" onclick="switchTab('inicio')">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span>Inicio</span>
+  </button>
+  <button class="nav-btn" data-screen="entrenamiento" onclick="switchTab('entrenamiento')">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5h11M6.5 17.5h11M4 12h16M4 12l-2-2 2-2M20 12l2 2-2 2"/></svg>
+    <span>Entreno</span>
+  </button>
+  <button class="nav-btn" data-screen="perfil" onclick="switchTab('perfil')">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span>Perfil</span>
+  </button>
+</nav>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
