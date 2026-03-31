@@ -842,6 +842,78 @@ function saveReminder() {
   showToast('Recordatorio guardado ✓');
 }
 
+function renderBodySVGs() {
+  const front = document.getElementById('bodySvgFront');
+  const back = document.getElementById('bodySvgBack');
+  if (front) front.innerHTML = buildBodySVG('front');
+  if (back) back.innerHTML = buildBodySVG('back');
+}
+
+function buildBodySVG(side) {
+  const f = side === 'front';
+  return `<svg viewBox="0 0 80 200" xmlns="http://www.w3.org/2000/svg">
+    <defs><style>
+      .bm{fill:#242424;transition:fill .4s;}
+      .bm.active{fill:#E02020;}
+      .outline{fill:none;stroke:#444;stroke-width:0.8;}
+    </style></defs>
+    ${f ? `
+    <ellipse cx="40" cy="16" rx="10" ry="12" class="outline"/>
+    <rect x="36" y="27" width="8" height="7" rx="2" fill="#1c1c1c"/>
+    <ellipse id="bm-shoulders-l" cx="20" cy="42" rx="9" ry="7" class="bm"/>
+    <ellipse id="bm-shoulders-r" cx="60" cy="42" rx="9" ry="7" class="bm"/>
+    <path id="bm-chest" d="M28 34 Q40 40 52 34 L54 56 Q40 60 26 56 Z" class="bm"/>
+    <rect id="bm-abs" x="30" y="58" width="20" height="32" rx="4" class="bm"/>
+    <rect id="bm-biceps-l" x="14" y="48" width="8" height="22" rx="4" class="bm"/>
+    <rect id="bm-biceps-r" x="58" y="48" width="8" height="22" rx="4" class="bm"/>
+    <rect x="12" y="70" width="7" height="18" rx="3" fill="#1a1a1a" stroke="#333" stroke-width=".6"/>
+    <rect x="61" y="70" width="7" height="18" rx="3" fill="#1a1a1a" stroke="#333" stroke-width=".6"/>
+    <path d="M28 90 Q40 96 52 90 L54 108 Q40 112 26 108 Z" fill="#1c1c1c" stroke="#333" stroke-width=".6"/>
+    <rect id="bm-quads-l" x="27" y="110" width="11" height="38" rx="5" class="bm"/>
+    <rect id="bm-quads-r" x="42" y="110" width="11" height="38" rx="5" class="bm"/>
+    <ellipse cx="32" cy="150" rx="6" ry="4" fill="#1a1a1a" stroke="#333" stroke-width=".6"/>
+    <ellipse cx="48" cy="150" rx="6" ry="4" fill="#1a1a1a" stroke="#333" stroke-width=".6"/>
+    <rect id="bm-calves-l" x="28" y="154" width="9" height="30" rx="4" class="bm"/>
+    <rect id="bm-calves-r" x="43" y="154" width="9" height="30" rx="4" class="bm"/>
+    <ellipse cx="32" cy="186" rx="8" ry="4" fill="#1a1a1a" stroke="#333" stroke-width=".6"/>
+    <ellipse cx="48" cy="186" rx="8" ry="4" fill="#1a1a1a" stroke="#333" stroke-width=".6"/>
+    ` : `
+    <ellipse cx="40" cy="16" rx="10" ry="12" class="outline"/>
+    <rect x="36" y="27" width="8" height="7" rx="2" fill="#1c1c1c"/>
+    <path id="bm-upper-back" d="M26 34 Q40 30 54 34 L56 58 Q40 62 24 58 Z" class="bm"/>
+    <rect id="bm-lower-back" x="30" y="60" width="20" height="26" rx="4" class="bm"/>
+    <rect id="bm-triceps-l" x="14" y="48" width="8" height="22" rx="4" class="bm"/>
+    <rect id="bm-triceps-r" x="58" y="48" width="8" height="22" rx="4" class="bm"/>
+    <rect x="12" y="70" width="7" height="18" rx="3" fill="#1a1a1a" stroke="#333" stroke-width=".6"/>
+    <rect x="61" y="70" width="7" height="18" rx="3" fill="#1a1a1a" stroke="#333" stroke-width=".6"/>
+    <path id="bm-glutes" d="M27 88 Q40 96 53 88 L55 112 Q40 116 25 112 Z" class="bm"/>
+    <rect id="bm-hamstrings-l" x="27" y="114" width="11" height="34" rx="5" class="bm"/>
+    <rect id="bm-hamstrings-r" x="42" y="114" width="11" height="34" rx="5" class="bm"/>
+    <ellipse cx="32" cy="150" rx="6" ry="4" fill="#1a1a1a" stroke="#333" stroke-width=".6"/>
+    <ellipse cx="48" cy="150" rx="6" ry="4" fill="#1a1a1a" stroke="#333" stroke-width=".6"/>
+    <rect id="bm-calves-back-l" x="28" y="154" width="9" height="30" rx="4" class="bm"/>
+    <rect id="bm-calves-back-r" x="43" y="154" width="9" height="30" rx="4" class="bm"/>
+    <ellipse cx="32" cy="186" rx="8" ry="4" fill="#1a1a1a" stroke="#333" stroke-width=".6"/>
+    <ellipse cx="48" cy="186" rx="8" ry="4" fill="#1a1a1a" stroke="#333" stroke-width=".6"/>
+    `}
+  </svg>`;
+}
+
+function renderBodyMuscleMap() {
+  renderBodySVGs();
+  const today = new Date().toDateString();
+  const todayWorkouts = DB.history.filter(h => new Date(h.date).toDateString() === today);
+  todayWorkouts.forEach(w => {
+    w.exercises.forEach(ex => {
+      const mapping = MUSCLE_SVG_MAP[ex.muscle] || [];
+      mapping.forEach(id => {
+        const el = document.getElementById('bm-' + id);
+        if (el) el.classList.add('active');
+      });
+    });
+  });
+}
+
 // ── START ────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   init();
