@@ -571,41 +571,29 @@ function endWorkoutCleanup() {
 //   PERFIL
 // ══════════════════════════════════════════════
 function renderPerfil() {
-  try {
-    const p = DB.profile;
-    const name = p.name || 'Tu nombre';
+  const p = DB.profile;
+  const name = p.name || 'Tu nombre';
+  const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+  renderAvatars();
+  document.getElementById('profileNameBig').textContent = name;
+  document.getElementById('profileSubBig').textContent = p.weight ? `${p.weight}kg · ${p.height}cm · ${p.age} años` : 'Configura tu perfil';
+  updateHeaderAvatar();
 
-    const nameEl = document.getElementById('profileNameBig');
-    const subEl = document.getElementById('profileSubBig');
-    if (nameEl) nameEl.textContent = name;
-    if (subEl) subEl.textContent = p.weight ? `${p.weight}kg · ${p.height}cm · ${p.age} años` : 'Configura tu perfil';
-
-    renderAvatars();
-
-    const pNameEl = document.getElementById('pName');
-    const pWeightEl = document.getElementById('pWeight');
-    const pHeightEl = document.getElementById('pHeight');
-    const pAgeEl = document.getElementById('pAge');
-    const pGoalEl = document.getElementById('pGoal');
-    const pActivityEl = document.getElementById('pActivity');
-
-    if (p.name && pNameEl) pNameEl.value = p.name;
-    if (p.weight && pWeightEl) pWeightEl.value = p.weight;
-    if (p.height && pHeightEl) pHeightEl.value = p.height;
-    if (p.age && pAgeEl) pAgeEl.value = p.age;
-    if (pGoalEl) pGoalEl.value = p.goal || 'maintain';
-    if (pActivityEl) pActivityEl.value = p.activity || '1.55';
-
+  if (p.name) {
+    document.getElementById('pName').value = p.name;
+    document.getElementById('pWeight').value = p.weight || '';
+    document.getElementById('pHeight').value = p.height || '';
+    document.getElementById('pAge').value = p.age || '';
+    document.getElementById('pGoal').value = p.goal || 'maintain';
+    document.getElementById('pActivity').value = p.activity || '1.55';
     selectedGender = p.gender || 'H';
     document.querySelectorAll('.gender-btn').forEach(b => b.classList.toggle('selected', b.dataset.g === selectedGender));
-
     renderCalorieCard();
-    renderCalendar();
-    renderStreakCard();
-    renderBodyMuscleMap();
-  } catch(e) {
-    console.error('renderPerfil error:', e);
   }
+
+  renderCalendar();
+  renderStreakCard();
+  renderBodyMuscleMap();
 }
 
 function updateHeaderAvatar() {
