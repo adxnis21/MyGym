@@ -23,9 +23,11 @@ function init() {
   renderAll();
   renderExercisePicker();
   renderMuscleFilter();
-  renderBodySVGs();
   setupDayBtns();
   updateHeaderAvatar();
+  if (DB.reminder && DB.reminder.days) {
+    checkReminderNow(DB.reminder.days, DB.reminder.time, DB.reminder.msg);
+  }
 }
 
 // ── STORAGE ─────────────────────────────────
@@ -51,17 +53,29 @@ function switchTab(name) {
 
 // ── VIEWS (dentro de Entrenamiento) ─────────
 function showView(viewId) {
-  ['view-routines','view-create-routine','view-exercise-picker','view-active-workout'].forEach(v => {
+  // 1. Añadimos 'home' y 'profile' a la lista para que se oculten cuando entres a otra vista
+  ['home', 'view-routines', 'view-create-routine', 'view-exercise-picker', 'view-active-workout', 'profile'].forEach(v => {
     const el = document.getElementById(v);
     if (el) el.style.display = 'none';
   });
-  const target = document.getElementById(viewId);
-  if (target) target.style.display = 'flex';
-  target.style.flexDirection = 'column';
 
+  const target = document.getElementById(viewId);
+  if (target) {
+    // Si es una de las vistas de entreno o el perfil, usamos flex
+    target.style.display = 'flex';
+    target.style.flexDirection = 'column';
+  }
+
+  // 2. Renderizamos el contenido según la vista
   if (viewId === 'view-routines') renderRoutinesList();
   if (viewId === 'view-exercise-picker') renderExercisePicker();
   if (viewId === 'view-create-routine') renderAddedExercises();
+  
+  // 3. ¡IMPORTANTE! Si vas al perfil, asegúrate de cargar los datos
+  if (viewId === 'profile') {
+      console.log("Cargando vista de perfil...");
+      // Aquí puedes llamar a una función que rellene tus stats si las tienes
+  }
 }
 
 // ── RENDER ALL ───────────────────────────────
@@ -571,29 +585,41 @@ function endWorkoutCleanup() {
 //   PERFIL
 // ══════════════════════════════════════════════
 function renderPerfil() {
-  const p = DB.profile;
-  const name = p.name || 'Tu nombre';
-  const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
-  renderAvatars();
-  document.getElementById('profileNameBig').textContent = name;
-  document.getElementById('profileSubBig').textContent = p.weight ? `${p.weight}kg · ${p.height}cm · ${p.age} años` : 'Configura tu perfil';
-  updateHeaderAvatar();
+  try {
+    const p = DB.profile;
+    const name = p.name || 'Tu nombre';
 
-  if (p.name) {
-    document.getElementById('pName').value = p.name;
-    document.getElementById('pWeight').value = p.weight || '';
-    document.getElementById('pHeight').value = p.height || '';
-    document.getElementById('pAge').value = p.age || '';
-    document.getElementById('pGoal').value = p.goal || 'maintain';
-    document.getElementById('pActivity').value = p.activity || '1.55';
-    selectedGender = p.gender || 'H';
-    document.querySelectorAll('.gender-btn').forEach(b => b.classList.toggle('selected', b.dataset.g === selectedGender));
-    renderCalorieCard();
+    const nameEl = document.getElementById('profileNameBig');
+    const subEl = document.getElementById('profileSubBig');
+    if (nameEl) nameEl.textContent = name;
+    if (subEl) subEl.textContent = p.weight ? `${p.weight}kg · ${p.height}cm · ${p.age} años` : 'Configura tu perfil';
+
+    renderAvatars();
+
+    if (p.name) {
+      const pName = document.getElementById('pName');
+      const pWeight = document.getElementById('pWeight');
+      const pHeight = document.getElementById('pHeight');
+      const pAge = document.getElementById('pAge');
+      const pGoal = document.getElementById('pGoal');
+      const pActivity = document.getElementById('pActivity');
+      if (pName) pName.value = p.name;
+      if (pWeight) pWeight.value = p.weight || '';
+      if (pHeight) pHeight.value = p.height || '';
+      if (pAge) pAge.value = p.age || '';
+      if (pGoal) pGoal.value = p.goal || 'maintain';
+      if (pActivity) pActivity.value = p.activity || '1.55';
+      selectedGender = p.gender || 'H';
+      document.querySelectorAll('.gender-btn').forEach(b => b.classList.toggle('selected', b.dataset.g === selectedGender));
+      renderCalorieCard();
+    }
+
+    renderCalendar();
+    renderStreakCard();
+    renderBodyMuscleMap();
+  } catch(e) {
+    console.error('renderPerfil error:', e);
   }
-
-  renderCalendar();
-  renderStreakCard();
-  renderBodyMuscleMap();
 }
 
 function updateHeaderAvatar() {
@@ -842,6 +868,7 @@ function saveReminder() {
   showToast('Recordatorio guardado ✓');
 }
 
+// ── CUERPO MUSCULAR ──────────────────────────
 function renderBodySVGs() {
   const front = document.getElementById('bodySvgFront');
   const back = document.getElementById('bodySvgBack');
@@ -905,7 +932,7 @@ function renderBodyMuscleMap() {
   const todayWorkouts = DB.history.filter(h => new Date(h.date).toDateString() === today);
   todayWorkouts.forEach(w => {
     w.exercises.forEach(ex => {
-      const mapping = MUSCLE_SVG_MAP[ex.muscle] || [];
+      const mapping = (typeof MUSCLE_SVG_MAP !== 'undefined' && MUSCLE_SVG_MAP[ex.muscle]) || [];
       mapping.forEach(id => {
         const el = document.getElementById('bm-' + id);
         if (el) el.classList.add('active');
@@ -914,6 +941,17 @@ function renderBodyMuscleMap() {
   });
 }
 
+function checkReminderNow(days, time, msg) {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  const now = new Date();
+  const dayMap = {0:'D',1:'L',2:'M',3:'X',4:'J',5:'V',6:'S'};
+  const todayKey = dayMap[now.getDay()];
+  const [h, m] = time.split(':').map(Number);
+  const diff = (h * 60 + m) - (now.getHours() * 60 + now.getMinutes());
+  if (days.includes(todayKey) && diff > 0) {
+    setTimeout(() => new Notification('GymPro 💪', { body: msg, icon: 'icons/icon-192.png' }), diff * 60000);
+  }
+}
 // ── START ────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   init();
