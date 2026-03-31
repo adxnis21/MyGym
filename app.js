@@ -41,27 +41,60 @@ function saveDB() {
 
 // ── TAB NAVIGATION ──────────────────────────
 function switchTab(name) {
+  // 1. Limpiamos clases active de las pantallas y botones
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('screen-' + name).classList.add('active');
-  document.querySelector(`.nav-btn[data-screen="${name}"]`).classList.add('active');
+
+  // 2. Activamos la pantalla correspondiente
+  const targetScreen = document.getElementById('screen-' + name);
+  if (targetScreen) {
+    targetScreen.classList.add('active');
+  }
+
+  // 3. Activamos el botón del menú
+  const targetBtn = document.querySelector(`.nav-btn[data-screen="${name}"]`);
+  if (targetBtn) {
+    targetBtn.classList.add('active');
+  }
+
+  // 4. Renderizamos el contenido
   if (name === 'inicio') renderInicio();
-  if (name === 'perfil') renderPerfil();
+  
+  if (name === 'perfil') {
+    renderPerfil(); // <--- Asegúrate de que esta función exista abajo
+  }
+
+  // TRUCO: Si vas a 'entrenamiento', asegúrate de que se vea la lista de rutinas
+  if (name === 'entrenamiento') {
+    showView('view-routines'); 
+  }
 }
 
 // ── VIEWS (dentro de Entrenamiento) ─────────
 function showView(viewId) {
-  ['view-routines','view-create-routine','view-exercise-picker','view-active-workout'].forEach(v => {
+  // 1. Añadimos 'home' y 'profile' a la lista para que se oculten cuando entres a otra vista
+  ['home', 'view-routines', 'view-create-routine', 'view-exercise-picker', 'view-active-workout', 'profile'].forEach(v => {
     const el = document.getElementById(v);
     if (el) el.style.display = 'none';
   });
-  const target = document.getElementById(viewId);
-  if (target) target.style.display = 'flex';
-  target.style.flexDirection = 'column';
 
+  const target = document.getElementById(viewId);
+  if (target) {
+    // Si es una de las vistas de entreno o el perfil, usamos flex
+    target.style.display = 'flex';
+    target.style.flexDirection = 'column';
+  }
+
+  // 2. Renderizamos el contenido según la vista
   if (viewId === 'view-routines') renderRoutinesList();
   if (viewId === 'view-exercise-picker') renderExercisePicker();
   if (viewId === 'view-create-routine') renderAddedExercises();
+  
+  // 3. ¡IMPORTANTE! Si vas al perfil, asegúrate de cargar los datos
+  if (viewId === 'profile') {
+      console.log("Cargando vista de perfil...");
+      // Aquí puedes llamar a una función que rellene tus stats si las tienes
+  }
 }
 
 // ── RENDER ALL ───────────────────────────────
