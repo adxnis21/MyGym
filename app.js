@@ -23,7 +23,6 @@ function init() {
   renderAll();
   renderExercisePicker();
   renderMuscleFilter();
-  renderBodySVGs();
   setupDayBtns();
   updateHeaderAvatar();
 }
@@ -842,25 +841,7 @@ function saveReminder() {
   showToast('Recordatorio guardado ✓');
 }
 
-// Función para mostrar/ocultar el formulario de edición
-function toggleEditProfile() {
-  const form = document.getElementById('profileEditForm');
-  form.style.display = form.style.display === 'none' ? 'block' : 'none';
-}
 
-// Función para guardar los datos y calcular calorías
-function saveProfile() {
-  const name = document.getElementById('pName').value;
-  if(name) {
-    DB.profile.name = name;
-    document.getElementById('profileNameBig').innerText = name;
-    saveDB();
-    showToast("¡Perfil guardado!");
-    toggleEditProfile(); // Cierra el formulario
-  } else {
-    showToast("Por favor, introduce un nombre");
-  }
-}
 
 // ── START ────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
