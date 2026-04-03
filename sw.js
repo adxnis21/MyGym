@@ -1,4 +1,4 @@
-const CACHE = 'gympro-v22';
+const CACHE = 'gympro-v23';
 const ASSETS = ['./', './index.html', './styles.css', './app.js', './data.js', './manifest.json'];
 
 self.addEventListener('install', e => {
