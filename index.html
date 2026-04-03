@@ -215,6 +215,10 @@
   </div>
 
   <!-- ══════════ PERFIL ══════════ -->
+  <div style="height:120px"></div>
+    </div>
+  </div>
+
   <div class="screen" id="screen-perfil">
     <div class="safe-top"></div>
     <div class="screen-header">
@@ -226,9 +230,8 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       </button>
     </div>
-    <div class="scroll-area">
 
-      <!-- Avatar y nombre -->
+    <div class="scroll-area">
       <div class="profile-hero">
         <div style="position:relative;display:inline-block">
           <div class="profile-avatar-big" id="profileAvatarBig">?</div>
@@ -241,23 +244,22 @@
         <div class="profile-sub" id="profileSubBig">Configura tu perfil</div>
       </div>
 
-      <!-- Edit form (oculto por defecto) -->
-      <div id="profileEditForm" style="display:none;padding:0 16px 16px">
+      <div id="profileEditForm" style="display:none; padding:0 16px 16px">
         <div class="form-group">
           <label class="form-label">Nombre</label>
           <input class="form-input" id="pName" placeholder="Tu nombre">
         </div>
         <div class="form-group">
           <label class="form-label">Peso (kg)</label>
-          <input class="form-input" id="pWeight" type="number" placeholder="75" min="30" max="250">
+          <input class="form-input" id="pWeight" type="number" placeholder="75">
         </div>
         <div class="form-group">
           <label class="form-label">Altura (cm)</label>
-          <input class="form-input" id="pHeight" type="number" placeholder="175" min="100" max="250">
+          <input class="form-input" id="pHeight" type="number" placeholder="175">
         </div>
         <div class="form-group">
           <label class="form-label">Edad</label>
-          <input class="form-input" id="pAge" type="number" placeholder="25" min="10" max="100">
+          <input class="form-input" id="pAge" type="number" placeholder="25">
         </div>
         <div class="form-group">
           <label class="form-label">Sexo</label>
@@ -269,25 +271,14 @@
         <div class="form-group">
           <label class="form-label">Objetivo</label>
           <select class="form-input" id="pGoal">
-            <option value="cut">Definir (déficit calórico)</option>
-            <option value="maintain">Mantener peso</option>
-            <option value="bulk">Ganar masa (superávit)</option>
+            <option value="cut">Definir</option>
+            <option value="maintain">Mantener</option>
+            <option value="bulk">Volumen</option>
           </select>
         </div>
-        <div class="form-group">
-          <label class="form-label">Actividad física</label>
-          <select class="form-input" id="pActivity">
-            <option value="1.2">Sedentario (sin ejercicio)</option>
-            <option value="1.375">Ligero (1-3 días/semana)</option>
-            <option value="1.55" selected>Moderado (3-5 días/semana)</option>
-            <option value="1.725">Activo (6-7 días/semana)</option>
-            <option value="1.9">Muy activo (2x día)</option>
-          </select>
-        </div>
-        <button class="save-profile-btn" onclick="saveProfile()">Guardar perfil</button>
+        <button class="save-profile-btn" onclick="saveProfile()" style="width:100%; padding:15px; background:var(--red); color:white; border:none; border-radius:12px; font-weight:bold; margin-top:10px;">Guardar perfil</button>
       </div>
 
-      <!-- Calorías -->
       <div class="calorie-card" id="calorieCard" style="display:none">
         <div class="cal-header">
           <div class="cal-title">Calorías diarias</div>
@@ -295,34 +286,24 @@
         </div>
         <div class="cal-number" id="calNumber">—</div>
         <div class="cal-macros" id="calMacros"></div>
-        <div class="cal-desc" id="calDesc"></div>
       </div>
 
-      <!-- Calendario -->
       <div class="section-label" style="margin-top:20px">CALENDARIO DE ENTRENOS</div>
       <div class="calendar-card" id="calendarCard"></div>
 
-      <!-- Racha -->
       <div class="streak-card" id="streakCard">
         <div class="streak-fire">🔥</div>
         <div class="streak-info">
           <div class="streak-num" id="streakNum">0 semanas</div>
           <div class="streak-label">Racha actual</div>
         </div>
-        <div class="streak-best">
-          <div class="streak-num" id="streakBest" style="font-size:18px">0</div>
-          <div class="streak-label">Mejor racha</div>
-        </div>
       </div>
 
-      <div style="height:110px"></div>
+      <div style="height:120px"></div>
     </div>
   </div>
-    
-</div><!-- /app -->
 
-<!-- BOTTOM NAV -->
-<nav class="bottom-nav" id="bottomNav">
+</div> <nav class="bottom-nav" id="bottomNav">
   <button class="nav-btn active" data-screen="inicio" onclick="switchTab('inicio')">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
     <span>Inicio</span>

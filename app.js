@@ -42,8 +42,14 @@ function saveDB() {
 function switchTab(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('screen-' + name).classList.add('active');
-  document.querySelector(`.nav-btn[data-screen="${name}"]`).classList.add('active');
+
+  const target = document.getElementById('screen-' + name);
+  if (!target) return;
+  target.classList.add('active');
+
+  const navBtn = document.querySelector(`.nav-btn[data-screen="${name}"]`);
+  if (navBtn) navBtn.classList.add('active');
+
   if (name === 'inicio') renderInicio();
   if (name === 'perfil') renderPerfil();
 }
@@ -55,7 +61,8 @@ function showView(viewId) {
     if (el) el.style.display = 'none';
   });
   const target = document.getElementById(viewId);
-  if (target) target.style.display = 'flex';
+  if (!target) return;
+  target.style.display = 'flex';
   target.style.flexDirection = 'column';
 
   if (viewId === 'view-routines') renderRoutinesList();
@@ -570,29 +577,41 @@ function endWorkoutCleanup() {
 //   PERFIL
 // ══════════════════════════════════════════════
 function renderPerfil() {
-  const p = DB.profile;
-  const name = p.name || 'Tu nombre';
-  const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
-  renderAvatars();
-  document.getElementById('profileNameBig').textContent = name;
-  document.getElementById('profileSubBig').textContent = p.weight ? `${p.weight}kg · ${p.height}cm · ${p.age} años` : 'Configura tu perfil';
-  updateHeaderAvatar();
+  try {
+    const p = DB.profile;
+    const name = p.name || 'Tu nombre';
 
-  if (p.name) {
-    document.getElementById('pName').value = p.name;
-    document.getElementById('pWeight').value = p.weight || '';
-    document.getElementById('pHeight').value = p.height || '';
-    document.getElementById('pAge').value = p.age || '';
-    document.getElementById('pGoal').value = p.goal || 'maintain';
-    document.getElementById('pActivity').value = p.activity || '1.55';
-    selectedGender = p.gender || 'H';
-    document.querySelectorAll('.gender-btn').forEach(b => b.classList.toggle('selected', b.dataset.g === selectedGender));
-    renderCalorieCard();
+    const nameEl = document.getElementById('profileNameBig');
+    const subEl = document.getElementById('profileSubBig');
+    if (nameEl) nameEl.textContent = name;
+    if (subEl) subEl.textContent = p.weight ? `${p.weight}kg · ${p.height}cm · ${p.age} años` : 'Configura tu perfil';
+
+    renderAvatars();
+
+    if (p.name) {
+      const pName = document.getElementById('pName');
+      const pWeight = document.getElementById('pWeight');
+      const pHeight = document.getElementById('pHeight');
+      const pAge = document.getElementById('pAge');
+      const pGoal = document.getElementById('pGoal');
+      const pActivity = document.getElementById('pActivity');
+      if (pName) pName.value = p.name;
+      if (pWeight) pWeight.value = p.weight || '';
+      if (pHeight) pHeight.value = p.height || '';
+      if (pAge) pAge.value = p.age || '';
+      if (pGoal) pGoal.value = p.goal || 'maintain';
+      if (pActivity) pActivity.value = p.activity || '1.55';
+      selectedGender = p.gender || 'H';
+      document.querySelectorAll('.gender-btn').forEach(b => b.classList.toggle('selected', b.dataset.g === selectedGender));
+      renderCalorieCard();
+    }
+
+    renderCalendar();
+    renderStreakCard();
+    //renderBodyMuscleMap();
+  } catch(e) {
+    console.error('renderPerfil error:', e);
   }
-
-  renderCalendar();
-  renderStreakCard();
-  renderBodyMuscleMap();
 }
 
 function updateHeaderAvatar() {
@@ -679,7 +698,8 @@ function renderCalorieCard() {
     <div class="cal-macro"><div class="cal-macro-val" style="color:#4a9eff">${carbs}g</div><div class="cal-macro-lbl">Carbohidratos</div></div>
     <div class="cal-macro"><div class="cal-macro-val" style="color:#f0c040">${fat}g</div><div class="cal-macro-lbl">Grasas</div></div>
   `;
-  document.getElementById('calDesc').textContent =
+  const calDescEl = document.getElementById('calDesc');
+  if (calDescEl) calDescEl.textContent =
     `TMB: ${Math.round(bmr)} kcal · TDEE: ${tdee} kcal · Objetivo: ${target} kcal`;
 }
 // ── CALENDARIO ───────────────────────────────

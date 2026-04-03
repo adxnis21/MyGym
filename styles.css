@@ -75,21 +75,20 @@ body { font-family: var(--font-body); color: var(--text); -webkit-font-smoothing
 /* ── APP CONTAINER ── */
 #app { height: 100vh; position: relative; overflow: hidden; }
 
-/* ── SCREENS ── */
 .screen {
-  position: absolute; inset: 0;
+  position: absolute;
+  inset: 0;
   background: var(--bg);
   display: none;
   flex-direction: column;
-  opacity: 0;
-  transform: translateX(30px);
-  transition: opacity .22s ease, transform .22s ease;
   overflow: hidden;
+  z-index: 1;
 }
+
 .screen.active {
   display: flex;
-  opacity: 1;
-  transform: translateX(0);
+  flex-direction: column;
+  z-index: 10;
 }
 
 /* ── SCROLL AREA ── */
@@ -1097,3 +1096,4 @@ body { font-family: var(--font-body); color: var(--text); -webkit-font-smoothing
   justify-content: center;
   cursor: pointer;
 }
+
