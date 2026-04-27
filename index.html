@@ -299,28 +299,20 @@
         </div>
       </div>
       <div class="section-label" style="margin-top:20px">OBSIDIAN</div>
-<div class="obsidian-card">
-  <div class="obsidian-status">
-    <div class="obsidian-dot" id="obsidianDot"></div>
-    <div class="obsidian-status-text">
-      <span id="obsidianStatusText">Sin conectar</span>
-    </div>
-  </div>
-  <div class="obsidian-actions">
-    <button class="rc-action-btn rc-action-start" onclick="obsidianConectar()">
-      Conectar vault
-    </button>
-    <button class="rc-action-btn rc-action-edit" onclick="obsidianSincronizarEjercicios()">
-      Sincronizar fichas de ejercicios
-    </button>
-    <button class="rc-action-btn rc-action-edit" onclick="abrirEnObsidian()">
-    Abrir entreno de hoy en Obsidian
-  </button>
-  </div>
-  <div class="obsidian-hint">
-    Conecta una sola vez. Las sesiones y récords se guardan automáticamente en tu vault.
-  </div>
-</div>
+        <div class="obsidian-card">
+          <div class="obsidian-actions">
+            <button class="rc-action-btn rc-action-edit" onclick="obsidianSincronizarEjercicios()">
+              Sincronizar fichas de ejercicios
+            </button>
+            <button class="rc-action-btn rc-action-start" onclick="abrirEnObsidian()">
+              Abrir entreno de hoy en Obsidian
+            </button>
+          </div>
+          <div class="obsidian-hint">
+            Al terminar un entreno se descarga la nota automáticamente. 
+            Guárdala en <strong>CEREBRITO/Diario/</strong> desde la app Archivos.
+          </div>
+        </div>
       <div style="height:120px"></div>
     </div>
   </div>
