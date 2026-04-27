@@ -310,9 +310,10 @@ function renderAddedExercises() {
     el.innerHTML = '<div style="color:var(--text3);font-size:13px;text-align:center;padding:16px 0">Ningún ejercicio añadido</div>';
     return;
   }
-  el.innerHTML = tempRoutine.exercises.map((ex, i) =>
-    `<div class="added-ex-card" style="flex-direction:column;align-items:stretch;gap:12px;padding:14px">
+ el.innerHTML = tempRoutine.exercises.map((ex, i) =>
+    `<div class="added-ex-card" draggable="true" data-index="${i}" style="flex-direction:column;align-items:stretch;gap:12px;padding:14px">
       <div style="display:flex;align-items:center;gap:10px">
+        <div class="aec-drag" data-index="${i}">⠿</div>
         <div class="aec-icon">
             <img src="${ex.icon}" class="img-ejercicio-lista">
         </div>
@@ -350,6 +351,75 @@ function renderAddedExercises() {
       </div>
     </div>`
   ).join('');
+  initDragSort(el);
+}
+
+function initDragSort(container) {
+  let dragIdx = null;
+
+  container.querySelectorAll('.added-ex-card').forEach(card => {
+    card.addEventListener('dragstart', e => {
+      dragIdx = parseInt(card.dataset.index);
+      card.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    card.addEventListener('dragend', () => {
+      card.classList.remove('dragging');
+      container.querySelectorAll('.added-ex-card').forEach(c => c.classList.remove('drag-over'));
+    });
+    card.addEventListener('dragover', e => {
+      e.preventDefault();
+      container.querySelectorAll('.added-ex-card').forEach(c => c.classList.remove('drag-over'));
+      card.classList.add('drag-over');
+    });
+    card.addEventListener('drop', e => {
+      e.preventDefault();
+      const targetIdx = parseInt(card.dataset.index);
+      if (dragIdx === null || dragIdx === targetIdx) return;
+      const moved = tempRoutine.exercises.splice(dragIdx, 1)[0];
+      tempRoutine.exercises.splice(targetIdx, 0, moved);
+      renderAddedExercises();
+    });
+
+    const drag = card.querySelector('.aec-drag');
+    if (!drag) return;
+    let touchStartY = 0;
+    drag.addEventListener('touchstart', e => {
+      touchStartY = e.touches[0].clientY;
+      dragIdx = parseInt(card.dataset.index);
+      card.classList.add('dragging');
+    }, { passive: true });
+    drag.addEventListener('touchmove', e => {
+      e.preventDefault();
+      const y = e.touches[0].clientY;
+      const cards = [...container.querySelectorAll('.added-ex-card')];
+      cards.forEach(c => c.classList.remove('drag-over'));
+      const target = cards.find(c => {
+        const r = c.getBoundingClientRect();
+        return y >= r.top && y <= r.bottom;
+      });
+      if (target) target.classList.add('drag-over');
+    }, { passive: false });
+    drag.addEventListener('touchend', e => {
+      const y = e.changedTouches[0].clientY;
+      const cards = [...container.querySelectorAll('.added-ex-card')];
+      const target = cards.find(c => {
+        const r = c.getBoundingClientRect();
+        return y >= r.top && y <= r.bottom;
+      });
+      if (target) {
+        const targetIdx = parseInt(target.dataset.index);
+        if (dragIdx !== null && dragIdx !== targetIdx) {
+          const moved = tempRoutine.exercises.splice(dragIdx, 1)[0];
+          tempRoutine.exercises.splice(targetIdx, 0, moved);
+          renderAddedExercises();
+        }
+      }
+      card.classList.remove('dragging');
+      container.querySelectorAll('.added-ex-card').forEach(c => c.classList.remove('drag-over'));
+      dragIdx = null;
+    });
+  });
 }
 
 function changeExField(idx, field, delta) {

@@ -1150,3 +1150,24 @@ body { font-family: var(--font-body); color: var(--text); -webkit-font-smoothing
   margin-top: 10px;
   line-height: 1.5;
 }
+/* ── DRAG & DROP EJERCICIOS ── */
+.aec-drag {
+  font-size: 18px;
+  color: var(--text3);
+  cursor: grab;
+  padding: 4px 6px;
+  touch-action: none;
+  user-select: none;
+  flex-shrink: 0;
+}
+.aec-drag:active { cursor: grabbing; }
+
+.added-ex-card.dragging {
+  opacity: 0.4;
+  transform: scale(0.98);
+}
+
+.added-ex-card.drag-over {
+  border-color: var(--red);
+  background: rgba(224, 32, 32, 0.06);
+}
