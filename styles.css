@@ -1096,4 +1096,57 @@ body { font-family: var(--font-body); color: var(--text); -webkit-font-smoothing
   justify-content: center;
   cursor: pointer;
 }
+/* ── OBSIDIAN ── */
+.obsidian-card {
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 10px;
+}
 
+.obsidian-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.obsidian-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text3);
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+
+.obsidian-dot.connected {
+  background: #4CAF50;
+  box-shadow: 0 0 6px rgba(76,175,80,0.5);
+}
+
+.obsidian-status-text {
+  font-size: 13px;
+  color: var(--text2);
+}
+
+.obsidian-status-text span {
+  color: var(--text3);
+  font-size: 12px;
+  display: block;
+  margin-top: 1px;
+}
+
+.obsidian-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.obsidian-hint {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 10px;
+  line-height: 1.5;
+}

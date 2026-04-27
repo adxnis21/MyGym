@@ -1,5 +1,5 @@
-const CACHE = 'gympro-v23';
-const ASSETS = ['./', './index.html', './styles.css', './app.js', './data.js', './manifest.json'];
+const CACHE = 'gympro-v2';
+const ASSETS = ['./', './index.html', './styles.css', './app.js', './data.js', './manifest.json','./obsidian.js'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));

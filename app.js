@@ -204,6 +204,7 @@ function saveRoutine() {
   }
   saveDB();
   resetCreateForm();
+  obsidianGuardarRutina({ name, exercises: tempRoutine.exercises }); 
   showToast('Rutina guardada ✓');
   showView('view-routines');
 }
@@ -546,6 +547,7 @@ function finishWorkout() {
   updateRecords(exercises);
   saveDB();
   endWorkoutCleanup();
+  obsidianGuardarSesion(record);
   showToast('¡Entreno completado! 🔥');
   showView('view-routines');
   switchTab('inicio');
@@ -560,6 +562,7 @@ function updateRecords(exercises) {
       const cur = DB.records[ex.name];
       if (!cur || kg > parseFloat(cur.kg) || (kg === parseFloat(cur.kg) && reps > parseInt(cur.reps))) {
         DB.records[ex.name] = { kg, reps, date: new Date().toISOString() };
+        obsidianRegistrarPR(ex.name, kg, reps);
       }
     });
   });
