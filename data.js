@@ -31,7 +31,7 @@ const EXERCISES_DB = [
   { id:"ex017", name:"Curl Predicador",          muscle:"Bíceps",   icon:"imgBiceps/predicador.jpg", secondary:[] },
   // TRÍCEPS
   { id:"ex018", name:"Extensión tríceps por encima de la cabeza",  muscle:"Tríceps",  icon:"imgTriceps/cabeza.jpg", secondary:[] },
-  { id:"ex019", name:"EXtensión tríceps a un brazo",            muscle:"Tríceps",  icon:"imgTriceps/extension.jpg", secondary:[] },
+  { id:"ex019", name:"Extensión tríceps a un brazo",            muscle:"Tríceps",  icon:"imgTriceps/extension.jpg", secondary:[] },
   // PIERNAS
   { id:"ex020", name:"Sentadilla barra",         muscle:"Piernas",  icon:"imgPierna/sentadilla.png", secondary:["Glúteos"] },
   { id:"ex021", name:"Sentadilla Hack",        muscle:"Piernas",  icon:"imgPierna/hack.jpg", secondary:["Glúteos"] },
